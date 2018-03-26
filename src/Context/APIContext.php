@@ -1,6 +1,6 @@
 <?php
 
-namespace IntegralService\BehatContext;
+namespace IntegralService\Context;
 
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
