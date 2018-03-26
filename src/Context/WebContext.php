@@ -1,5 +1,7 @@
 <?php
 
+namespace IntegralService\BehatContext;
+
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Mink\Element\NodeElement;
