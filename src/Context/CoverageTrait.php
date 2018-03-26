@@ -1,12 +1,13 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace IntegralService\Context;
+
+
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use SebastianBergmann\CodeCoverage\CodeCoverage;
+use SebastianBergmann\CodeCoverage\Filter;
+use SebastianBergmann\CodeCoverage\Report\Clover;
+
 
 /**
  *
@@ -14,12 +15,6 @@ namespace IntegralService\Context;
  */
 trait CoverageTrait
 {
-
-    use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-    use SebastianBergmann\CodeCoverage\CodeCoverage;
-    use SebastianBergmann\CodeCoverage\Filter;
-    use SebastianBergmann\CodeCoverage\Report\Clover;
-
 
     /**
      * @var PHP_CodeCoverage
