@@ -3,7 +3,10 @@
     "description": "IntegralService Behat Contexts",
     "keywords": ["Behat", "Symfony2", "Context"],
     "type": "library",
-    "license": "freeware",
+    "homepage":    "https://github.com/IntegralService/BehatContext",
+    "license":     "MIT",
+
+    "minimum-stability": "dev",
 
     "require": {
         "php": ">=5.6",
