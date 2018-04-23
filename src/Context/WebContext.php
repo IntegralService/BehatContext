@@ -100,7 +100,7 @@ class WebContext extends MinkContext implements Context, SnippetAcceptingContext
        $page = $this->getSession()->getPage();
        $findName = $page->find("css", $element);
        if (!$findName) {
-           throw new Exception($element . " could not be found");
+           throw new \Exception($element . " could not be found");
        } else {
            $findName->click();
        }
