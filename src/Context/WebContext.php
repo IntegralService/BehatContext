@@ -249,4 +249,55 @@ class WebContext extends MinkContext implements Context, SnippetAcceptingContext
 
         return $optionField;
     }
+
+    /**
+     * Fills in specified field with date
+     * Example: When I fill in "field_ID" with date "now"
+     * Example: When I fill in "field_ID" with date "-7 days"
+     * Example: When I fill in "field_ID" with date "+7 days"
+     * Example: When I fill in "field_ID" with date "-/+0 weeks"
+     * Example: When I fill in "field_ID" with date "-/+0 years"
+     *
+     * @When /^(?:|I )fill in "(?P<field>(?:[^"]|\\")*)" with date "(?P<value>(?:[^"]|\\")*)"$/
+     */
+    public function fillDateField($field, $value)
+    {
+            $date = new \DateTime($value);
+            $this->getSession()->getPage()->findField($field)->setValue($date->format("d/m/Y"));
+    }
+
+    /**
+     * Click some text
+     *
+     * @When /^I click on the text "([^"]*)"$/
+     */
+    public function iClickOnTheText($text)
+    {
+        $session = $this->getSession();
+        $element = $session->getPage()->find(
+            'xpath',
+            $session->getSelectorsHandler()->selectorToXpath('xpath', '//*[text()="'. $text .'"]')
+        );
+        if (null === $element) {
+            throw new \InvalidArgumentException(sprintf('Cannot find text: "%s"', $text));
+        }
+
+        $element->click();
+
+    }
+
+    /**
+     * @When I click the :arg1 element
+     */
+    public function iClickTheElement($selector)
+    {
+        $page = $this->getSession()->getPage();
+        $element = $page->find('css', $selector);
+
+        if (empty($element)) {
+            throw new Exception("No html element found for the selector ('$selector')");
+        }
+
+        $element->click();
+    }
 }
