@@ -5,8 +5,6 @@ namespace IntegralService\Context;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Behatch\Context\RestContext;
-use UserBundle\Entity\User;
-use UserBundle\Helper\ControllerTrait;
 
 /**
  * APIContext
