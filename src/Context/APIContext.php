@@ -5,8 +5,7 @@ namespace IntegralService\Context;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Behatch\Context\RestContext;
-use UserBundle\Entity\User;
-use UserBundle\Helper\ControllerTrait;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * APIContext
@@ -19,7 +18,6 @@ class APIContext extends RestContext implements KernelAwareContext
     public $refresh;
 
     use KernelDictionary;
-    use ControllerTrait;
 
     /**
      * @Then the JSON should contain JWT Token
@@ -89,7 +87,7 @@ class APIContext extends RestContext implements KernelAwareContext
      * @param User $user
      * @return type
      */
-    public function getToken(User $user)
+    public function getToken(UserInterface $user)
     {
         return $this->kernel->getContainer()->get('lexik_jwt_authentication.encoder')
                ->encode([
