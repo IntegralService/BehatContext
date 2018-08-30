@@ -300,4 +300,16 @@ class WebContext extends MinkContext implements Context, SnippetAcceptingContext
 
         $element->click();
     }
+
+    /**
+     * @When I scroll to top
+     */
+    public function iScrollToTop()
+    {
+        try {
+            $this->getSession()->executeScript("(function(){window.scrollTo(0, 0);})();");
+        } catch (Exception $e) {
+            throw new \Exception("ScrollToTop failed");
+        }
+    }
 }
