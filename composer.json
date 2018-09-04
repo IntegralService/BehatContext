@@ -21,7 +21,8 @@
         "symfony/dom-crawler": "^2.4|^3.0|^4.0",
         "behatch/contexts": "^2.7",
         "phpunit/php-code-coverage": "^5",
-        "phpunit/phpunit": "^6"
+        "phpunit/phpunit": "^6",
+        "squizlabs/php_codesniffer": "2.*"
     },
 
     "autoload": {
