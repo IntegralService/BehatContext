@@ -42,22 +42,26 @@ class APIContext extends RestContext implements KernelAwareContext
     }
 
    /**
-    * @Given /^I am authenticated as "([^"]*)"$/
+    * @Given I am authenticated as :username
+    * @Given I am authenticated as :username with provider :provider
     */
-    public function iAmAuthenticatedAs($username)
+    public function iAmAuthenticatedAs($username, $provider = 'fos_user.user_provider.username_email')
     {
-        $user = $this->kernel->getContainer()->get('fos_user.user_manager')->findUserByUsernameOrEmail($username);
+        try {
+            $user = $this->kernel->getContainer()->get($provider)->loadUserByUsername($username);
+        } catch (\Exception $e) {
+            $user = null;
+        }
 
-        //if user not found
+        // if user not found
         if($user === null) {
-
+            throw new \Behat\Mink\Exception\ExpectationException("User \"$username\" was not found", $this->getSession());
         }else{
             $this->token = $this->getToken($user);
             $this->iAddHeaderEqualTo("Authorization", "Bearer ".$this->token);
         }
 
     }
-
 
     /**
      * Sends a HTTP request with a some parameters
