@@ -108,8 +108,8 @@ class APIContext extends RestContext implements KernelAwareContext
     private function getTokenExpiryDateTime()
     {
         $tokenTtl = $this->kernel->getContainer()->getParameter('lexik_jwt_authentication.token_ttl');
-        $now = new DateTime();
-        $now->add(new DateInterval('PT'.$tokenTtl.'S'));
+        $now = new \DateTime();
+        $now->add(new \DateInterval('PT'.$tokenTtl.'S'));
 
         return $now->format('U');
     }
