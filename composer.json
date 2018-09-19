@@ -23,7 +23,8 @@
         "phpunit/php-code-coverage": "^5",
         "phpunit/phpunit": "^6",
         "squizlabs/php_codesniffer": "2.*",
-        "escapestudios/symfony2-coding-standard": "~2.0" 
+        "escapestudios/symfony2-coding-standard": "~2.0",
+        "behat/mink-goutte-driver": "~1.2"
     },
 
     "autoload": {
