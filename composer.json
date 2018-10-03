@@ -34,10 +34,6 @@
     },
 
     "post-install-cmd": [
-        "bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard"
+        "phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard"
     ],
-
-    "config": {
-        "bin-dir": "bin/"
-    }
 }
