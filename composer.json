@@ -33,7 +33,16 @@
         }
     },
 
-    "post-install-cmd": [
+    "install-scripts": [
         "phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard"
+    ],
+    "post-install-cmd": [
+        "@install-scripts"
+    ],
+    "post-package-install": [
+        "@install-scripts"
+    ],
+    "post-package-update": [
+        "@install-scripts"
     ]
 }
