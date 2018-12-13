@@ -1,13 +1,11 @@
 <?php
 
-namespace IntegralService\Context;
-
+namespace IntegralService\BehatContext;
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Filter;
 use SebastianBergmann\CodeCoverage\Report\Clover;
-
 
 /**
  *
@@ -15,7 +13,6 @@ use SebastianBergmann\CodeCoverage\Report\Clover;
  */
 trait CoverageTrait
 {
-
     /**
      * @var PHP_CodeCoverage
      */
@@ -24,7 +21,7 @@ trait CoverageTrait
     /** @BeforeSuite */
     public static function setup()
     {
-        $filter         = new Filter();
+        $filter = new Filter();
         $filter->addDirectoryToWhitelist(__DIR__ . "/../../src");
         self::$coverage = new CodeCoverage(null, $filter);
     }
@@ -36,9 +33,14 @@ trait CoverageTrait
         $writer->process(self::$coverage, __DIR__ . "/../../results/behat_coverage.xml");
     }
 
+    /**
+     * @param BeforeScenarioScope $scope
+     * @return string
+     */
     private function getCoverageKeyFromScope(BeforeScenarioScope $scope)
     {
         $name = $scope->getFeature()->getTitle() . '::' . $scope->getScenario()->getTitle();
+
         return $name;
     }
 
@@ -55,5 +57,4 @@ trait CoverageTrait
     {
         self::$coverage->stop();
     }
-
 }

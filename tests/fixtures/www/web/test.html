@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Test page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <h1>Welcome to the Integral Service BehatContext test page!</h1>
+        
+        <h2>Testing page content</h2>
+        
+        <div class="text-content">This is the first text div</div>
+        <div class="text-content">This is the second text div</div>
+
+        <div class="age-content">There is at least 1 test of age format</div>
+        
+        <h2>Testing inputs</h2>
+
+        <form name="my-form" id="my-form">
+            <select id="first-select" name="my-form_first-select">
+                <option value="value1">1</option>
+                <option value="value2">2</option>
+                <option value="value3" selected>3</option>
+                <option value="value4">4</option>
+                <option value="value5">5</option>
+                <option value="value6">6</option>
+            </select>
+
+            <input type="date" id="date-input" name="my-form_date-input"/>
+        </form>
+        
+        <h2>Testing interactions</h2>
+        
+        <div>
+            There is a text an the following part 
+            <span class="clickable" onclick="this.parentNode.removeChild(this)" style="color: #0000F0; font-style: italic;">is clickable</span>
+            and something may be done when you click it
+        </div>
+
+        <div id="empty-on-load"></div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <td>Some stuff</td>
+                    <td>Some button</td>
+                    <td>Some link</td>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <tr>
+                    <td>Line 1</td>
+                    <td><button class="table-button">Clickme</button></td>
+                    <td><a class="table-link" href="#" data-href="web/test2.html">Followme</a></td>
+                </tr>
+                <tr>
+                    <td>Line 2</td>
+                    <td><button class="table-button">Clickme</button></td>
+                    <td><a class="table-link" href="test2.html">Followme</a></td>
+                </tr>
+                <tr>
+                    <td>Line 3</td>
+                    <td><button class="table-button" onclick="getElementById('empty-on-load').innerHTML = 'You pressed right!'">Clickme</button></td>
+                    <td><a class="table-link" href="#">Followme</a></td>
+                </tr>
+                <tr>
+                    <td>Line 4</td>
+                    <td><button class="table-button">Clickme</button></td>
+                    <td><a class="table-link" href="#">Followme</a></td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </body>
+</html>

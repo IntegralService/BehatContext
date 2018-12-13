@@ -1,11 +1,10 @@
 {
-    "name": "integralservice/behatcontext",
+    "name": "integralservice/behat-context",
     "description": "IntegralService Behat Contexts",
     "keywords": ["Behat", "Symfony2", "Context"],
     "type": "library",
-    "homepage":    "https://github.com/IntegralService/BehatContext",
-    "license":     "MIT",
-
+    "homepage": "https://github.com/IntegralService/BehatContext",
+    "license": "MIT",
     "minimum-stability": "dev",
 
     "require": {
@@ -13,18 +12,20 @@
         "behat/behat": "^3.5.0",
         "behat/mink-extension": "^2.3.1",
         "behat/symfony2-extension": "^2.1.5",
-        "behat/mink-browserkit-driver": "^1.3.3",
-        "behat/mink-selenium2-driver": "^1.3.1",
-        "justinrainbow/json-schema": "^5.0",
-        "symfony/property-access": "^2.3|^3.0|^4.0",
-        "symfony/http-foundation": "^2.3|^3.0|^4.0",
+        "symfony/security": "^3.4",
         "symfony/dom-crawler": "^2.4|^3.0|^4.0",
-        "behatch/contexts": "^3.2.0",
+        "symfony/translation": "^3.4",
+        "symfony/config": "^3.4",
+        "symfony/dependency-injection": "^3.4",
         "phpunit/php-code-coverage": "^5",
-        "phpunit/phpunit": "^6",
-        "squizlabs/php_codesniffer": "2.*",
-        "escapestudios/symfony2-coding-standard": "~2.0",
-        "behat/mink-goutte-driver": "~1.2"
+        "phpunit/phpunit": "^6"
+    },
+
+    "require-dev": {
+        "behat/mink-goutte-driver": "^1.1",
+        "fabpot/goutte": "^3.2",
+        "guzzlehttp/guzzle": "^6.3",
+        "behat/mink-selenium2-driver": "^1.3"
     },
 
     "autoload": {
@@ -32,17 +33,8 @@
             "IntegralService\\": "src/"
         }
     },
-
-    "install-scripts": [
-        "phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard"
-    ],
-    "post-install-cmd": [
-        "@install-scripts"
-    ],
-    "post-package-install": [
-        "@install-scripts"
-    ],
-    "post-package-update": [
-        "@install-scripts"
-    ]
+    
+    "config": {
+        "bin-dir": "bin/"
+    }
 }
