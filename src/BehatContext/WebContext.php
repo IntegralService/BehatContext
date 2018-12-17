@@ -1,18 +1,16 @@
 <?php
 
-namespace IntegralService\Context;
+namespace IntegralService\BehatContext;
 
-use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
-use Behat\MinkExtension\Context\MinkContext;
+use Behat\MinkExtension\Context\RawMinkContext;
 
 /**
  * Defines application features from the specific context.
  */
-class WebContext extends MinkContext implements Context, SnippetAcceptingContext
+class WebContext extends RawMinkContext
 {
     /**
      * Initializes context.
@@ -32,6 +30,7 @@ class WebContext extends MinkContext implements Context, SnippetAcceptingContext
     {
        sleep($sec);
     }
+
      /**
       * Log in user
       * @Given I am logged in as :login with password :password
@@ -92,20 +91,6 @@ class WebContext extends MinkContext implements Context, SnippetAcceptingContext
         }
     }
 
-    /**
-     * @Then /^I click on "([^"]*)"$/
-     */
-    public function iClickOn($element)
-    {
-       $page = $this->getSession()->getPage();
-       $findName = $page->find("css", $element);
-       if (!$findName) {
-           throw new \Exception($element . " could not be found");
-       } else {
-           $findName->click();
-       }
-    }
-
 
     /**
      * Checks, that page contains specified number and text
@@ -120,50 +105,10 @@ class WebContext extends MinkContext implements Context, SnippetAcceptingContext
     }
 
     /**
-     * @When I press ":linkText" in the ":rowText" row
-     */
-    public function iPressInTheRow($linkText, $rowText)
-    {
-        $this->findRowByText($rowText)->pressButton($linkText);
-    }
-
-    /**
-     * @When I follow ":linkText" in the ":rowText" row
-     */
-    public function iFollowInTheRow($linkText, $rowText)
-    {
-        $this->findRowByText($rowText)->clickLink($linkText);
-    }
-
-    /**
-     * @When I follow ":linkText" by ":attributeName" in the ":rowText" row
-     */
-    public function iFollowByInTheRow($linkText, $attributeName, $rowText)
-    {
-        $row = $this->findRowByText($rowText);
-        $element = $row->findLink($linkText);
-        $attributeValue = $element->getAttribute($attributeName);
-
-        $this->visit($attributeValue);
-    }
-
-    /**
-     * @param $rowText
-     * @return NodeElement
-     */
-    private function findRowByText($rowText)
-    {
-        $this->assertSession()->elementExists('css', sprintf('table tr:contains("%s")', $rowText));
-        return $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $rowText));
-    }
-
-
-
-    /**
      * Checks, that option from select with specified id|name|label|value is selected.
      *
      * @Then /^the "(?P<select>(?:[^"]|\\")*)" select field (?:contains|should contain) the "(?P<option>(?:[^"]|\\")*)" option$/
-     * @Then /^the "(?P<option>(?:[^"]|\\")*)" option (?:is|should be) in the "(?P<select>(?:[^"]|\\")*)" (?:select) field$/
+     * @Then /^the "(?P<option>(?:[^"]|\\")*)" option (?:is|should be) in the "(?P<select>(?:[^"]|\\")*)" select field$/
      */
     public function theSelectFieldShouldContainOption($select, $option)
     {
@@ -178,7 +123,7 @@ class WebContext extends MinkContext implements Context, SnippetAcceptingContext
      * Checks, that option from select with specified id|name|label|value is selected.
      *
      * @Then /^the "(?P<select>(?:[^"]|\\")*)" select field (?:does not contain|should not contain) the "(?P<option>(?:[^"]|\\")*)" option$/
-     * @Then /^the "(?P<option>(?:[^"]|\\")*)" option (?:is not|should not be) in the "(?P<select>(?:[^"]|\\")*)" (?:select) field$/
+     * @Then /^the "(?P<option>(?:[^"]|\\")*)" option (?:is not|should not be) in the "(?P<select>(?:[^"]|\\")*)" select field$/
      */
     public function theSelectFieldShouldNotContainOption($select, $option)
     {
@@ -214,7 +159,7 @@ class WebContext extends MinkContext implements Context, SnippetAcceptingContext
      *
      * @Then /^the "(?P<option>(?:[^"]|\\")*)" option from "(?P<select>(?:[^"]|\\")*)" (?:is not|should not be) selected/
      * @Then /^the option "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)" (?:is not|should not be) selected$/
-     * @Then /^"(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)" (?:is not |should not be) selected$/
+     * @Then /^"(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)" (?:is not|should not be) selected$/
      */
     public function theOptionFromShouldNotBeSelected($option, $select)
     {
@@ -227,6 +172,120 @@ class WebContext extends MinkContext implements Context, SnippetAcceptingContext
        if ($optionField->isSelected()) {
            throw new ExpectationException('Select option field with value|text "'.$option.'" is selected in the select "'.$select.'"', $this->getSession());
        }
+    }
+
+    /**
+     * Fills in specified field with date
+     * Example: When I fill in "field_ID" with date "now"
+     * Example: When I fill in "field_ID" with date "-7 days"
+     * Example: When I fill in "field_ID" with date "+7 days"
+     * Example: When I fill in "field_ID" with date "-/+0 weeks"
+     * Example: When I fill in "field_ID" with date "-/+0 years"
+     *
+     * @When /^(?:|I )fill in "(?P<field>(?:[^"]|\\")*)" with date "(?P<value>(?:[^"]|\\")*)"$/
+     * @When /^(?:|I )fill in "(?P<field>(?:[^"]|\\")*)" with date "(?P<value>(?:[^"]|\\")*)" in "(?P<format>(?:[^"]|\\")*)" format$/
+     */
+    public function fillDateField($selector, $value, $format = "d/m/Y")
+    {
+            $date = new \DateTime($value);
+            $field = $this->getSession()->getPage()->findField($selector);
+
+            if (null === $field) {
+                throw new ElementNotFoundException($this->getSession(), 'input field', 'id|name|label|value', $selector);
+            }
+
+            $field->setValue($date->format($format));
+    }
+
+    /**
+     * @Then /^I click on "([^"]*)"$/
+     */
+    public function iClickOn($element)
+    {
+       $page = $this->getSession()->getPage();
+       $findName = $page->find("css", $element);
+
+       if (!$findName) {
+           throw new ElementNotFoundException($this->getSession(), 'CSS selector', $element);
+       } else {
+           $findName->click();
+       }
+    }
+
+    /**
+     * @When I press ":linkText" in the ":rowText" row
+     */
+    public function iPressInTheRow($linkText, $rowText)
+    {
+        $this->findRowByText($rowText)->pressButton($linkText);
+    }
+
+    /**
+     * @When I follow ":linkText" in the ":rowText" row
+     */
+    public function iFollowInTheRow($linkText, $rowText)
+    {
+        $this->findRowByText($rowText)->clickLink($linkText);
+    }
+
+    /**
+     * @When I follow ":linkText" by ":attributeName" in the ":rowText" row
+     */
+    public function iFollowByInTheRow($linkText, $attributeName, $rowText)
+    {
+        $row = $this->findRowByText($rowText);
+        $element = $row->findLink($linkText);
+        $attributeValue = $element->getAttribute($attributeName);
+
+        $this->visitPath($attributeValue);
+    }
+
+    /**
+     * Click some text
+     *
+     * @When /^I click on the text "([^"]*)"$/
+     */
+    public function iClickOnTheText($text)
+    {
+        $session = $this->getSession();
+        $element = $session->getPage()->find(
+            'xpath',
+            $session->getSelectorsHandler()->selectorToXpath('xpath', '//*[text()="'. $text .'"]')
+        );
+
+        if (null === $element) {
+            throw new ElementNotFoundException($this->getSession(), 'text', $text);
+        }
+
+        $element->click();
+
+    }
+
+    /**
+     * @When I click the :arg1 element
+     */
+    public function iClickTheElement($selector)
+    {
+        $page = $this->getSession()->getPage();
+        $element = $page->find('css', $selector);
+
+        if (empty($element)) {
+            throw new ElementNotFoundException($this->getSession(), "CSS selector", $selector);
+        }
+
+        $element->click();
+    }
+
+    /**
+     * @When I scroll to top
+     */
+    public function iScrollToTop()
+    {
+        try {
+            $this->getSession()->executeScript("(function(){window.scrollTo(0, 0);})();");
+        } catch (Exception $e) {
+            throw new \Exception("ScrollToTop failed");
+        }
     }
 
     /**
@@ -251,65 +310,25 @@ class WebContext extends MinkContext implements Context, SnippetAcceptingContext
     }
 
     /**
-     * Fills in specified field with date
-     * Example: When I fill in "field_ID" with date "now"
-     * Example: When I fill in "field_ID" with date "-7 days"
-     * Example: When I fill in "field_ID" with date "+7 days"
-     * Example: When I fill in "field_ID" with date "-/+0 weeks"
-     * Example: When I fill in "field_ID" with date "-/+0 years"
+     * @param $rowText
+     * @return NodeElement
+     */
+    private function findRowByText($rowText)
+    {
+        $this->assertSession()->elementExists('css', sprintf('table tr:contains("%s")', $rowText));
+
+        return $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $rowText));
+    }
+
+    /**
+     * Returns fixed step argument (with \\" replaced back to ")
      *
-     * @When /^(?:|I )fill in "(?P<field>(?:[^"]|\\")*)" with date "(?P<value>(?:[^"]|\\")*)"$/
-     */
-    public function fillDateField($field, $value)
-    {
-            $date = new \DateTime($value);
-            $this->getSession()->getPage()->findField($field)->setValue($date->format("d/m/Y"));
-    }
-
-    /**
-     * Click some text
+     * @param string $argument
      *
-     * @When /^I click on the text "([^"]*)"$/
+     * @return string
      */
-    public function iClickOnTheText($text)
+    protected function fixStepArgument($argument)
     {
-        $session = $this->getSession();
-        $element = $session->getPage()->find(
-            'xpath',
-            $session->getSelectorsHandler()->selectorToXpath('xpath', '//*[text()="'. $text .'"]')
-        );
-        if (null === $element) {
-            throw new \InvalidArgumentException(sprintf('Cannot find text: "%s"', $text));
-        }
-
-        $element->click();
-
-    }
-
-    /**
-     * @When I click the :arg1 element
-     */
-    public function iClickTheElement($selector)
-    {
-        $page = $this->getSession()->getPage();
-        $element = $page->find('css', $selector);
-
-        if (empty($element)) {
-            throw new Exception("No html element found for the selector ('$selector')");
-        }
-
-        $element->click();
-    }
-
-    /**
-     * @When I scroll to top
-     */
-    public function iScrollToTop()
-    {
-        try {
-            $this->getSession()->executeScript("(function(){window.scrollTo(0, 0);})();");
-        } catch (Exception $e) {
-            throw new \Exception("ScrollToTop failed");
-        }
+        return str_replace('\\"', '"', $argument);
     }
 }

@@ -1,0 +1,28 @@
+default:
+    suites:
+        default:
+            paths: [ '%paths.base%/tests/features' ]
+            contexts:
+                - Behat\MinkExtension\Context\MinkContext
+                - integralservice:context:api
+                - integralservice:context:email
+                - integralservice:context:web
+
+    extensions:
+        Behat\MinkExtension:
+            base_url: 'http://localhost:8080'
+            files_path: 'tests/fixtures/files'
+            goutte: ~
+            selenium2: ~
+            browser_name: 'chrome'
+            sessions:
+                default:
+                    goutte: ~
+                symfony2:
+                    goutte: ~
+        IntegralService\Extension: ~
+
+symfony2:
+    extensions:
+        Behat\MinkExtension:
+            default_session: symfony2
