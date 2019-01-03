@@ -7,6 +7,18 @@ default:
                 - integralservice:context:api
                 - integralservice:context:email
                 - integralservice:context:web
+                - integralservice:context:screenshot:
+                    mail_to:
+                        - recipient1@gmail.com
+                        - recipient2@gmail.com
+                    mail_from: fail-behat@gmail.com
+                    mail_subject: Tests failed
+                    mailer_host: smtp.gmail.com
+                    mailer_port: 465
+                    mailer_encryption: ssl
+                    mailer_username: your_username@gmail.com
+                    mailer_password: your_password
+                    tmpPath: /var/tmp
 
     extensions:
         Behat\MinkExtension:
