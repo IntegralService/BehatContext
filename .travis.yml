@@ -39,7 +39,7 @@ before_script:
 
     - echo "memory_limit = 2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
-    - php -S localhost:8080 -t tests/fixtures/www &> /dev/null &
+    - php -S localhost:8080 -t tests/fixtures/www tests/fixtures/www/router.php &> /dev/null &
     - cp behat.yml{.dist,}
 
     - COMPOSER_MEMORY_LIMIT=-1 composer update $DEPS

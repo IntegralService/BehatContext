@@ -99,6 +99,19 @@ Feature: Web Feature
         Then I should see "You are on another page"
 
 
+    #########
+    # LOGIN #
+    #########
+
+    Scenario: Test that the secured area is actually secured
+        When I am on "web/secured_area.php"
+        Then I should see "Access denied"
+
+    Scenario: Test login
+        Given I log in as "superadmin" in "_login-field" with password "superpassword" in "_password-field" and submit button "OK"
+        Then  I should be on "web/secured_area.php"
+        And   I should see "Access granted"
+
 
 
     ########
@@ -107,9 +120,6 @@ Feature: Web Feature
 
     # @Then I wait :sec
     # public function wait($sec)
-
-    # @Given I am logged in as :login with password :password
-    # public function iAmLoggedInAsWithPassword($login, $password)
 
     # @When I scroll to top
     # public function iScrollToTop()
