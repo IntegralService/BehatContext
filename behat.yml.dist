@@ -18,8 +18,7 @@ default:
                     mailer_encryption: ssl
                     mailer_username: your_username@gmail.com
                     mailer_password: your_password
-                    baseUrl: http://localhost:8080
-                    tempPath: /var/tmp
+                    tmpPath: /var/tmp
 
     extensions:
         Behat\MinkExtension:
