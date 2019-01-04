@@ -4,6 +4,7 @@ default:
             paths: [ '%paths.base%/tests/features' ]
             contexts:
                 - Behat\MinkExtension\Context\MinkContext
+                - integralservice:context:coverage
                 - integralservice:context:api
                 - integralservice:context:email
                 - integralservice:context:web
