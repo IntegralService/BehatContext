@@ -3,6 +3,7 @@
 namespace IntegralService\BehatContext;
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\MinkExtension\Context\RawMinkContext;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Filter;
 use SebastianBergmann\CodeCoverage\Report\Clover;
@@ -11,7 +12,7 @@ use SebastianBergmann\CodeCoverage\Report\Clover;
  *
  * @author Julien Rouvier <julien@integral-service.fr>
  */
-trait CoverageTrait
+class CoverageContext extends RawMinkContext
 {
     /**
      * @var PHP_CodeCoverage
