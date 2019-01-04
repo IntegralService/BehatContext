@@ -31,18 +31,32 @@ class WebContext extends RawMinkContext
        sleep($sec);
     }
 
-     /**
-      * Log in user
-      * @Given I am logged in as :login with password :password
-      */
-    public function iAmLoggedInAsWithPassword($login, $password)
+    /**
+     * Log in user
+     * @Given I am logged in as :login with password :password
+     * @Given I log in as :login in :loginFieldName with password :password in :passwordFieldName and submit button :submitButtonValue
+     */
+    public function iAmLoggedInAsWithPassword($login, $password, $loginFieldName = '_username', $passwordFieldName = '_password', $submitButtonValue = 'Connexion')
     {
         $session = $this->getSession();
         $baseUrl = $this->getMinkParameter('base_url');
         $session->visit(sprintf('%s/login', $baseUrl));
-        $session->getPage()->findField('_username')->setValue($login);
-        $session->getPage()->findField('_password')->setValue($password);
-        $session->getPage()->findButton('Connexion')->click();
+
+        if (null === ($loginField = $session->getPage()->findField($loginFieldName))) {
+            throw new ElementNotFoundException($this->getSession(), 'field', 'name', $loginFieldName);
+        }
+
+        if (null === ($passwordField = $session->getPage()->findField($passwordFieldName))) {
+            throw new ElementNotFoundException($this->getSession(), 'field', 'name', $passwordFieldName);
+        }
+
+        if (null === ($submitButton = $session->getPage()->findButton($submitButtonValue))) {
+            throw new ElementNotFoundException($this->getSession(), 'button', 'text', $submitButtonValue);
+        }
+
+        $loginField->setValue($login);
+        $passwordField->setValue($password);
+        $submitButton->click();
     }
 
     /**
@@ -64,9 +78,8 @@ class WebContext extends RawMinkContext
             }
             throw new \Exception('Your text was not found in element');
         }
-
-
     }
+
     /**
      * Checks, that there is X number of element that matches css selector
      * @Then I should see :num matching :selector elements
@@ -90,7 +103,6 @@ class WebContext extends RawMinkContext
 
         }
     }
-
 
     /**
      * Checks, that page contains specified number and text
