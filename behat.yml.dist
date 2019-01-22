@@ -33,7 +33,10 @@ default:
                     goutte: ~
                 symfony2:
                     goutte: ~
-        IntegralService\Extension: ~
+        IntegralService\Extension:
+            whitelist:
+                - src
+            result_file: results/behat_coverage.xml
 
 symfony2:
     extensions:
