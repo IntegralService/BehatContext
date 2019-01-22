@@ -46,6 +46,7 @@ class Extension implements ExtensionInterface
         $this->loadClassResolver($container);
 
         CoverageContext::setWhitelist($config['whitelist']);
+        CoverageContext::setResultFile($config['result_file']);
     }
 
     /**
@@ -54,16 +55,23 @@ class Extension implements ExtensionInterface
     public function configure(ArrayNodeDefinition $builder)
     {
         $defaultWhitelist = ['src'];
+        $defaultResultFile = 'results/behat_coverage.xml';
 
         $builder->children()
                     ->arrayNode('whitelist')
-                    ->beforeNormalization()
-                        ->castToArray()
-                        ->ifEmpty()->then(function () use ($defaultWhitelist) {return $defaultWhitelist;})
+                        ->beforeNormalization()
+                            ->castToArray()
+                            ->ifEmpty()->then(function () use ($defaultWhitelist) {return $defaultWhitelist;})
+                        ->end()
+
+                        ->scalarPrototype()->end()
+                        ->defaultValue($defaultWhitelist)
                     ->end()
 
-                    ->scalarPrototype()->end()
-                    ->defaultValue($defaultWhitelist)
+                    ->scalarNode('result_file')
+                        ->cannotBeEmpty()
+                        ->defaultValue($defaultResultFile)
+                    ->end()
                 ->end()
         ;
     }
