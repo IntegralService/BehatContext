@@ -19,11 +19,41 @@ class CoverageContext extends RawMinkContext
      */
     private static $coverage;
 
+    /**
+     * @var array
+     */
+    private static $whiteListDirs;
+
+    /**
+     * @var string
+     */
+    private static $resultFile;
+
+    /**
+     * @param array $whitelist
+     */
+    public static function setWhitelist($whitelist)
+    {
+        self::$whiteListDirs = $whitelist;
+    }
+
+    /**
+     * @param string $resultFile
+     */
+    public static function setResultFile($resultFile)
+    {
+        self::$resultFile = $resultFile;
+    }
+
     /** @BeforeSuite */
     public static function setup()
     {
         $filter = new Filter();
-        $filter->addDirectoryToWhitelist(__DIR__ . "/../../src");
+
+        foreach (self::$whiteListDirs as $whiteListDir) {
+            $filter->addDirectoryToWhitelist($whiteListDir);
+        }
+
         self::$coverage = new CodeCoverage(null, $filter);
     }
 
@@ -31,7 +61,7 @@ class CoverageContext extends RawMinkContext
     public static function tearDown()
     {
         $writer = new Clover();
-        $writer->process(self::$coverage, __DIR__ . "/../../results/behat_coverage.xml");
+        $writer->process(self::$coverage, self::$resultFile);
     }
 
     /**
