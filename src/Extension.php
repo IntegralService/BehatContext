@@ -2,12 +2,13 @@
 
 namespace IntegralService;
 
+use Behat\Behat\Context\ServiceContainer\ContextExtension;
+use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
+use Behat\Testwork\ServiceContainer\ExtensionManager;
+use IntegralService\BehatContext\CoverageContext;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Behat\Behat\Context\ServiceContainer\ContextExtension;
-use Behat\Testwork\ServiceContainer\ExtensionManager;
-use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 
 /**
  *
@@ -43,6 +44,8 @@ class Extension implements ExtensionInterface
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadClassResolver($container);
+
+        CoverageContext::setWhitelist($config['whitelist']);
     }
 
     /**
@@ -50,6 +53,19 @@ class Extension implements ExtensionInterface
      */
     public function configure(ArrayNodeDefinition $builder)
     {
+        $defaultWhitelist = ['src'];
+
+        $builder->children()
+                    ->arrayNode('whitelist')
+                    ->beforeNormalization()
+                        ->castToArray()
+                        ->ifEmpty()->then(function () use ($defaultWhitelist) {return $defaultWhitelist;})
+                    ->end()
+
+                    ->scalarPrototype()->end()
+                    ->defaultValue($defaultWhitelist)
+                ->end()
+        ;
     }
 
     /**
