@@ -300,6 +300,19 @@ class WebContext extends RawMinkContext
         }
     }
 
+
+    /**
+     * @When I scroll to bottom
+     */
+    public function iScrollToBottom()
+    {
+        try {
+            $this->getSession()->executeScript("(function(){window.scrollTo(0, document.body.scrollHeight);})();");
+        } catch (Exception $e) {
+            throw new \Exception("ScrollToBottom failed");
+        }
+    }
+
     /**
      * @param string $option
      * @param string $select
