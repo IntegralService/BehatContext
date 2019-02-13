@@ -14,9 +14,9 @@ env:
         - SELENIUM_VERSION=3.6.0
     matrix:
         - DEPS="" PROFILE=default
-#        - DEPS="--prefer-lowest" PROFILE=default
+        - DEPS="--prefer-lowest" PROFILE=default
         - DEPS="" PROFILE=symfony2
-#        - DEPS="--prefer-lowest" PROFILE=symfony2
+        - DEPS="--prefer-lowest" PROFILE=symfony2
 
 php:
     - 7.0
