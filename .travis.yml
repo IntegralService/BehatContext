@@ -1,5 +1,10 @@
 language: php
 
+dist: trusty
+
+jdk:
+    - openjdk8
+
 addons:
   chrome: stable
 
@@ -19,8 +24,6 @@ env:
 #        - DEPS="--prefer-lowest" PROFILE=symfony2
 
 php:
-    - 7.0
-    - 7.1
     - 7.2
     - nightly
 
