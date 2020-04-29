@@ -356,4 +356,20 @@ class WebContext extends RawMinkContext
     {
         return str_replace('\\"', '"', $argument);
     }
+
+    /**
+     * @Then I fill in wysiwyg field :locator with :value
+     */
+    public function iFillInWysiwygOnFieldWith($locator, $value) {
+        $el = $this->getSession()->getPage()->findField($locator);
+        if (empty($el)) {
+            throw new \Exception('Could not find WYSIWYG with locator: ' . $locator);
+        }
+        $fieldId = $el->getAttribute('id');
+        if (empty($fieldId)) {
+            throw new \Exception('Could not find an id for field with locator: ' . $locator);
+        }
+        $this->getSession()
+             ->executeScript("CKEDITOR.instances[\"$fieldId\"].setData(\"$value\");");
+    }
 }
