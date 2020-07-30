@@ -5,7 +5,7 @@
     "type": "library",
     "homepage": "https://github.com/IntegralService/BehatContext",
     "license": "MIT",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
 
     "require": {
         "php": ">=5.6",
