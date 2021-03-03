@@ -1,5 +1,10 @@
 language: php
 
+dist: xenial
+
+jdk:
+    - openjdk8
+
 addons:
   chrome: stable
 
@@ -10,8 +15,8 @@ cache:
 env:
     global:
         - DISPLAY=:99.0
-        - CHROME_DRIVER_VERSION=2.36
-        - SELENIUM_VERSION=3.6.0
+        - CHROME_DRIVER_VERSION=89.0.4389.23
+        - SELENIUM_VERSION=3.141.59
     matrix:
         - DEPS="" PROFILE=default
 #        - DEPS="--prefer-lowest" PROFILE=default
@@ -19,7 +24,6 @@ env:
 #        - DEPS="--prefer-lowest" PROFILE=symfony2
 
 php:
-    - 7.0
     - 7.1
     - 7.2
     - nightly
@@ -34,7 +38,7 @@ before_script:
 
     - wget "https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip"
     - unzip chromedriver_linux64.zip
-    - wget "https://selenium-release.storage.googleapis.com/${SELENIUM_VERSION%%.[[:digit:]]}/selenium-server-standalone-${SELENIUM_VERSION}.jar" -O selenium.jar
+    - wget "https://selenium-release.storage.googleapis.com/${SELENIUM_VERSION%.*}/selenium-server-standalone-${SELENIUM_VERSION}.jar" -O selenium.jar
     - java -jar -Dwebdriver.chrome.driver=./chromedriver selenium.jar &> /dev/null &
 
     - echo "memory_limit = 2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
